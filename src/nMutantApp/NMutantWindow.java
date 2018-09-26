@@ -1,5 +1,6 @@
 package nMutantApp;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,19 +15,22 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import sav.common.core.utils.StringUtils;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
+
+import nMutantApp.NMutant.NMutantOutput;
+import sav.common.core.SavException;
+import sav.common.core.utils.StringUtils;
 
 public class NMutantWindow extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JFrame frame;
 	private NMutant nMutant = new NMutant();
 	private JFileChooser fc;
-	private JComboBox<AttackFunction> attackFunctionCb;
-	private JComboBox<DataSet> datasetCb;
+	private JComboBox<AttackFunction> comboAttackFunction;
+	private JComboBox<DataSet> comboDataset;
 	private JTextField txtSample;
 	private JFormattedTextField txtTarget;
 	private JTextField txtModelPath;
@@ -59,8 +63,8 @@ public class NMutantWindow extends JPanel {
 
 	private void setDefaultValue() {
 		NMutantParams defaultParams = NMutantParams.getDefault();
-		attackFunctionCb.setSelectedItem(defaultParams.getAttackFunction());
-		datasetCb.setSelectedItem(defaultParams.getDataset());
+		comboAttackFunction.setSelectedItem(defaultParams.getAttackFunction());
+		comboDataset.setSelectedItem(defaultParams.getDataset());
 		txtSample.setText(defaultParams.getSamplePath());
 		txtTarget.setValue(defaultParams.getTarget());
 		txtModelPath.setText(defaultParams.getModelPath());
@@ -75,7 +79,7 @@ public class NMutantWindow extends JPanel {
 		fc = new JFileChooser();
 
 		frame = new JFrame("nMutant");
-		frame.setBounds(100, 100, 566, 422);
+		frame.setBounds(100, 100, 596, 422);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -83,35 +87,35 @@ public class NMutantWindow extends JPanel {
 		lblInput.setBounds(23, 42, 95, 14);
 		frame.getContentPane().add(lblInput);
 
-		attackFunctionCb = new JComboBox<>();
-		attackFunctionCb.setModel(new DefaultComboBoxModel<AttackFunction>(AttackFunction.values()));
-		attackFunctionCb.setBounds(128, 39, 133, 20);
-		frame.getContentPane().add(attackFunctionCb);
+		comboAttackFunction = new JComboBox<>();
+		comboAttackFunction.setModel(new DefaultComboBoxModel<AttackFunction>(AttackFunction.values()));
+		comboAttackFunction.setBounds(128, 39, 133, 20);
+		frame.getContentPane().add(comboAttackFunction);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(10, 70, 530, 238);
+		panel.setBounds(10, 70, 554, 238);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
 		/* Dataset */
 		JLabel lblInput_1 = new JLabel("Dataset");
 		lblInput_1.setToolTipText("The name of datasets");
-		lblInput_1.setBounds(10, 28, 46, 14);
+		lblInput_1.setBounds(10, 20, 95, 14);
 		panel.add(lblInput_1);
 
-		datasetCb = new JComboBox<>();
-		datasetCb.setModel(new DefaultComboBoxModel<>(DataSet.values()));
-		datasetCb.setBounds(141, 22, 133, 20);
-		panel.add(datasetCb);
+		comboDataset = new JComboBox<>();
+		comboDataset.setModel(new DefaultComboBoxModel<>(DataSet.values()));
+		comboDataset.setBounds(141, 17, 133, 20);
+		panel.add(comboDataset);
 
 		/* Sample */
 		JLabel lblSample = new JLabel("Sample");
-		lblSample.setBounds(10, 62, 46, 14);
+		lblSample.setBounds(10, 55, 121, 14);
 		panel.add(lblSample);
 
 		txtSample = new JTextField();
-		txtSample.setBounds(141, 53, 260, 20);
+		txtSample.setBounds(141, 52, 286, 20);
 		panel.add(txtSample);
 		txtSample.setColumns(10);
 
@@ -121,7 +125,7 @@ public class NMutantWindow extends JPanel {
 				onSelectFile(txtSample, false);
 			}
 		});
-		btnBrowse.setBounds(411, 52, 95, 23);
+		btnBrowse.setBounds(447, 51, 95, 23);
 		panel.add(btnBrowse);
 
 		/* Output Destination path */
@@ -130,7 +134,7 @@ public class NMutantWindow extends JPanel {
 		panel.add(lblStorePath);
 
 		txtOutputDest = new JTextField();
-		txtOutputDest.setBounds(141, 154, 260, 20);
+		txtOutputDest.setBounds(141, 157, 286, 20);
 		panel.add(txtOutputDest);
 		txtOutputDest.setColumns(10);
 
@@ -140,16 +144,16 @@ public class NMutantWindow extends JPanel {
 				onSelectFile(txtOutputDest, true);
 			}
 		});
-		btnOutputDest.setBounds(411, 151, 95, 23);
+		btnOutputDest.setBounds(447, 156, 95, 23);
 		panel.add(btnOutputDest);
 
 		/* Model path */
 		JLabel lblModel = new JLabel("Model");
-		lblModel.setBounds(10, 126, 46, 14);
+		lblModel.setBounds(10, 125, 46, 14);
 		panel.add(lblModel);
 
 		txtModelPath = new JTextField();
-		txtModelPath.setBounds(141, 120, 260, 20);
+		txtModelPath.setBounds(141, 122, 286, 20);
 		panel.add(txtModelPath);
 		txtModelPath.setColumns(10);
 
@@ -159,37 +163,69 @@ public class NMutantWindow extends JPanel {
 				onSelectFile(txtModelPath, true);
 			}
 		});
-		btnModelPath.setBounds(411, 119, 95, 23);
+		btnModelPath.setBounds(447, 121, 95, 23);
 		panel.add(btnModelPath);
 
 		/* Target */
 		JLabel lblTarget = new JLabel("Target");
-		lblTarget.setBounds(10, 92, 46, 14);
+		lblTarget.setBounds(10, 90, 46, 14);
 		panel.add(lblTarget);
 
 		txtTarget = new JFormattedTextField(NumberFormat.getNumberInstance());
-		txtTarget.setBounds(141, 86, 86, 20);
+		txtTarget.setBounds(141, 87, 86, 20);
 		panel.add(txtTarget);
 		txtTarget.setColumns(10);
 
 		/* Nb_classes */
 		JLabel lblNewLabel = new JLabel("Nb_classes");
-		lblNewLabel.setBounds(10, 194, 86, 14);
+		lblNewLabel.setBounds(10, 195, 86, 14);
 		panel.add(lblNewLabel);
 
 		txtNbClasses = new JFormattedTextField(NumberFormat.getNumberInstance());
-		txtNbClasses.setBounds(141, 188, 86, 20);
+		txtNbClasses.setBounds(141, 192, 86, 20);
 		panel.add(txtNbClasses);
 		txtNbClasses.setColumns(10);
 
 		JButton btnRun = new JButton("Run");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				try {
+					NMutantOutput output = nMutant.run(initNMutantParams());
+					
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								OutputFrame frame = new OutputFrame();
+								frame.setVisible(true);
+								frame.diplayResultImages(
+										output.getOrgImgPath(),
+										output.getAveImgPath());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+				} catch (SavException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		});
 		btnRun.setBounds(236, 330, 75, 23);
 		frame.getContentPane().add(btnRun);
+	}
+
+	protected NMutantParams initNMutantParams() {
+		NMutantParams params = new NMutantParams();
+		params.setAttackFunction((AttackFunction) comboAttackFunction.getSelectedItem());
+		params.setDataset((DataSet) comboDataset.getSelectedItem());
+		params.setSamplePath(txtSample.getText());
+		params.setTarget((int) txtTarget.getValue());
+		params.setModelPath(txtModelPath.getText());
+		params.setStorePath(txtOutputDest.getText());
+		params.setNbClasses((int) txtNbClasses.getValue());
+		return params;
 	}
 
 	private void onSelectFile(JTextField textField, boolean directoryMode) {

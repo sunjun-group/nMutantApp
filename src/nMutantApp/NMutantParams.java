@@ -13,7 +13,11 @@ public class NMutantParams {
 		NMutantParams params = new NMutantParams();
 		params.setAttackFunction(AttackFunction.BLACK_BOX);
 		params.setDataset(DataSet.mnist);
+		String workingFolder = ProjectConfiguration.getAbsolutePath("/python/nMutant");
+		params.setSamplePath(workingFolder + "/datasets/integration/mnist/2.png");
 		params.setTarget(1);
+		params.setModelPath(workingFolder + "/models/integration/mnist");
+		params.setStorePath(ProjectConfiguration.getAbsolutePath("/mt_result/integration/blackbox/mnist"));
 		params.setNbClasses(10);
 		return params;
 	}
