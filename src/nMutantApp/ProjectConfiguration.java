@@ -11,11 +11,14 @@ public class ProjectConfiguration {
 	static {
 		String path = new File(ProjectConfiguration.class.getProtectionDomain().getCodeSource().getLocation().getPath())
 				.getAbsolutePath();
+		System.out.println("path: " + path);
 		path = path.replace("\\", "/");
 		if (path.endsWith("/.")) {
 			path = path.substring(0, path.lastIndexOf("/."));
 		} else if (path.endsWith("nMutantApp/bin")) {
 			path = path.substring(0, path.indexOf("/nMutantApp/bin"));
+		} else if (path.endsWith("/nMutant.jar")) {
+			path = path.substring(0, path.indexOf("/nMutant.jar"));
 		}
 		installFolder = path;
 	}

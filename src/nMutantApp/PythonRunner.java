@@ -6,6 +6,7 @@ import java.util.List;
 
 import sav.common.core.SavException;
 import sav.common.core.utils.CollectionBuilder;
+import sav.common.core.utils.StringUtils;
 import sav.strategies.vm.VMRunner;
 
 public class PythonRunner extends VMRunner {
@@ -18,6 +19,7 @@ public class PythonRunner extends VMRunner {
 
 	public void start(PythonVmConfiguration vmConfig) throws SavException {
 		List<String> commands = buildCommandsFromConfiguration(vmConfig);
+		listener.printOut(StringUtils.join(commands, " "));
 		super.startVm(commands, true);
 	}
 

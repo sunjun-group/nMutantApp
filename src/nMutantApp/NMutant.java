@@ -1,14 +1,24 @@
 package nMutantApp;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import nMutantApp.PythonRunner.PythonVmConfiguration;
 import sav.common.core.SavException;
+import sav.common.core.utils.FileUtils;
 import sav.strategies.vm.ProgramArgumentBuilder;
 import sav.strategies.vm.VMRunner;
 
 public class NMutant extends VMRunner {
 
 	public NMutantOutput run(NMutantParams params) throws SavException {
-		NMutantOutput output = new NMutantOutput();
+		final NMutantOutput output = new NMutantOutput();
+		final String logFile = ProjectConfiguration.getAbsolutePath("/nmutant.log");
+		System.out.println("Log file: " + logFile);
+		clearIfTooLarge(logFile);
 		PythonRunner pythonRunner = new PythonRunner(new PythonRunner.Listener() {
 			
 			@Override
@@ -22,6 +32,7 @@ public class NMutant extends VMRunner {
 						output.setAveImgPath(line.substring(token.length(), line.indexOf("}")).trim());
 					}
 				}
+				FileUtils.appendFile(logFile, line + "\n");
 			}
 		});
 		pythonRunner.setWorkingDir(ProjectConfiguration.getAbsolutePath("/python/nMutant/nmutant_integration"));
@@ -43,6 +54,34 @@ public class NMutant extends VMRunner {
 			e.printStackTrace();
 		}
 		return output;
+	}
+
+	private void clearIfTooLarge(final String logFile) {
+		File file = new File(logFile);
+		if (file.exists()) {
+			boolean tooLarge = false;
+			Path filePath = Paths.get(logFile);
+			FileChannel fileChannel;
+			try {
+				fileChannel = FileChannel.open(filePath);
+				long fileSize = fileChannel.size();
+				System.out.println(fileSize + " bytes");
+				if (fileSize > (10 * 1024 * 1024)) {
+					tooLarge = true;
+				}
+				fileChannel.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (tooLarge) {
+				file.delete();
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public static class NMutantOutput {

@@ -15,8 +15,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
@@ -84,12 +82,12 @@ public class NMutantWindow extends JPanel {
 		frame.getContentPane().setLayout(null);
 
 		JLabel lblInput = new JLabel("Attack Function");
-		lblInput.setBounds(23, 42, 95, 14);
+		lblInput.setBounds(23, 42, 116, 14);
 		frame.getContentPane().add(lblInput);
 
 		comboAttackFunction = new JComboBox<>();
 		comboAttackFunction.setModel(new DefaultComboBoxModel<AttackFunction>(AttackFunction.values()));
-		comboAttackFunction.setBounds(128, 39, 133, 20);
+		comboAttackFunction.setBounds(149, 39, 133, 20);
 		frame.getContentPane().add(comboAttackFunction);
 
 		JPanel panel = new JPanel();
