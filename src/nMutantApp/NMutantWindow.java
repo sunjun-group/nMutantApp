@@ -98,7 +98,7 @@ public class NMutantWindow extends JPanel {
 
 		/* Dataset */
 		JLabel lblInput_1 = new JLabel("Dataset");
-		lblInput_1.setToolTipText("The name of datasets");
+		lblInput_1.setToolTipText("Name of Target Datasets");
 		lblInput_1.setBounds(10, 20, 95, 14);
 		panel.add(lblInput_1);
 
@@ -108,7 +108,8 @@ public class NMutantWindow extends JPanel {
 		panel.add(comboDataset);
 
 		/* Sample */
-		JLabel lblSample = new JLabel("Sample");
+		JLabel lblSample = new JLabel("Attacked Object");
+		lblSample.setToolTipText("Attacked Object Target");
 		lblSample.setBounds(10, 55, 121, 14);
 		panel.add(lblSample);
 
@@ -128,6 +129,7 @@ public class NMutantWindow extends JPanel {
 
 		/* Output Destination path */
 		JLabel lblStorePath = new JLabel("Output Destination");
+		lblStorePath.setToolTipText("Target Folder for Adversary Outputs");
 		lblStorePath.setBounds(10, 160, 121, 14);
 		panel.add(lblStorePath);
 
@@ -146,8 +148,8 @@ public class NMutantWindow extends JPanel {
 		panel.add(btnOutputDest);
 
 		/* Model path */
-		JLabel lblModel = new JLabel("Model");
-		lblModel.setBounds(10, 125, 46, 14);
+		JLabel lblModel = new JLabel("Attacked Model");
+		lblModel.setBounds(10, 125, 95, 14);
 		panel.add(lblModel);
 
 		txtModelPath = new JTextField();
@@ -165,8 +167,9 @@ public class NMutantWindow extends JPanel {
 		panel.add(btnModelPath);
 
 		/* Target */
-		JLabel lblTarget = new JLabel("Target");
-		lblTarget.setBounds(10, 90, 46, 14);
+		JLabel lblTarget = new JLabel("Expected Labels");
+		lblTarget.setToolTipText("Expected Target Label Prediction");
+		lblTarget.setBounds(10, 90, 121, 14);
 		panel.add(lblTarget);
 
 		txtTarget = new JFormattedTextField(NumberFormat.getNumberInstance());
@@ -176,6 +179,7 @@ public class NMutantWindow extends JPanel {
 
 		/* Nb_classes */
 		JLabel lblNewLabel = new JLabel("Nb_classes");
+		lblNewLabel.setToolTipText("Number of Classes of Dataset's output");
 		lblNewLabel.setBounds(10, 195, 86, 14);
 		panel.add(lblNewLabel);
 
