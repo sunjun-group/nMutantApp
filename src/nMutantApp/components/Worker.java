@@ -3,7 +3,7 @@ package nMutantApp.components;
 import javax.swing.SwingWorker;
 
 public class Worker extends SwingWorker<String, Runnable> {
-	static final String DONE = "done";
+	public static final String PROPERTY_NAME = "done";
 	private Runnable task;
 	
 	public Worker(Runnable task) {
@@ -13,12 +13,7 @@ public class Worker extends SwingWorker<String, Runnable> {
 	@Override
 	protected String doInBackground() throws Exception {
 		task.run();
-		firePropertyChange(DONE, false, true);
+		firePropertyChange(PROPERTY_NAME, false, true);
 		return null;
-	}
-	
-	public static enum State {
-		RUNNING,
-		DONE
 	}
 }

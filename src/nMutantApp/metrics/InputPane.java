@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,7 +39,9 @@ public class InputPane extends JInternalFrame {
 	}
 	
 	private void registerHandler() {
-		btnCalculMetrics.addActionListener(new ActionListener() {
+		btnCalculMetrics.setAction(new AbstractAction("Calculate Metrics") {
+			private static final long serialVersionUID = 1L;
+
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -52,10 +54,17 @@ public class InputPane extends JInternalFrame {
 					
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
-						btnCalculMetrics.setEnabled(true);
+						if (Worker.PROPERTY_NAME.equals(evt.getPropertyName())
+								&& Boolean.TRUE.equals(evt.getNewValue())) {
+							btnCalculMetrics.setEnabled(true);
+						}
 					}
 				});
 				worker.execute();
+			}
+			
+			@Override
+			public void setEnabled(boolean newValue) {
 			}
 		});
 	}
