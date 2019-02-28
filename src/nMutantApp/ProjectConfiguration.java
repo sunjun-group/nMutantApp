@@ -7,6 +7,8 @@ import java.util.List;
 
 public class ProjectConfiguration {
 	private static String installFolder;
+	private static String pythonAgentWorkingDir;
+	public static String pythonHome;
 	
 	static {
 		String path = new File(ProjectConfiguration.class.getProtectionDomain().getCodeSource().getLocation().getPath())
@@ -21,6 +23,8 @@ public class ProjectConfiguration {
 			path = path.substring(0, path.indexOf("/nMutant.jar"));
 		}
 		installFolder = path;
+		pythonAgentWorkingDir = "/Users/lylytran/Projects/Python/nMutant/attack_metrics";
+//		pythonWorkingDir = ProjectConfiguration.getAbsolutePath("/python/nMutant/nmutant_integration");
 	}
 	
 	public static void main(String[] args) {
@@ -50,5 +54,9 @@ public class ProjectConfiguration {
 
 	public static String getAbsolutePath(String relativePath) {
 		return installFolder + relativePath;
+	}
+	
+	public static String getPythonAgentWorkingDir() {
+		return pythonAgentWorkingDir;
 	}
 }
