@@ -3,6 +3,10 @@ package nMutantApp.metrics;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -16,6 +20,8 @@ import javax.swing.border.LineBorder;
 import nMutantApp.AttackFunction;
 import nMutantApp.DataSet;
 import nMutantApp.components.JComponentFactory;
+import nMutantApp.components.Worker;
+import nMutantApp.metrics.MetricsCalculator.MetricsOutputHandler;
 
 public class InputPane extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
@@ -23,10 +29,35 @@ public class InputPane extends JInternalFrame {
 	JTextField txtModel;
 	JComboBox<AttackFunction> comboAttackFunction;
 	JButton btnCalculMetrics = new JButton("Calculate Metrics");
+	private MetricsOutputHandler callback;
 
-	public InputPane() {
+	public InputPane(MetricsOutputHandler callback) {
 		decorate();
 		setVisible(true);
+		this.callback = callback;
+		registerHandler();
+	}
+	
+	private void registerHandler() {
+		btnCalculMetrics.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnCalculMetrics.setEnabled(false);
+				MetricsCalculator calculator = new MetricsCalculator((DataSet)comboDataset.getSelectedItem(), 
+						(AttackFunction)comboAttackFunction.getSelectedItem(), 
+						txtModel.getText(), callback);
+				Worker worker = new Worker(calculator);
+				worker.addPropertyChangeListener(new PropertyChangeListener() {
+					
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						btnCalculMetrics.setEnabled(true);
+					}
+				});
+				worker.execute();
+			}
+		});
 	}
 
 	private void decorate() {
@@ -70,4 +101,5 @@ public class InputPane extends JInternalFrame {
 		row++;
 		panel.add(btnCalculMetrics, JComponentFactory.gbc(1, row, 1, 1));
 	}
+	
 }

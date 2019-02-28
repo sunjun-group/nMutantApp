@@ -4,17 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import nMutantApp.ProjectConfiguration;
@@ -24,7 +20,7 @@ import nMutantApp.components.JComponentFactory;
 public class SettingDialog extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String settingFile = ProjectConfiguration.getAbsolutePath("/nmutant.conf");
-	static final String PY_HOME_KEY = "Python_home:";
+	public static final String PY_HOME_KEY = "Python_home:";
 	FileInput fileInput;
 	
 	public SettingDialog() {
@@ -34,19 +30,7 @@ public class SettingDialog extends JFrame {
 	}
 
 	public void open() {
-		if (new File(settingFile).exists()) {
-			try {
-				List<?> lines = FileUtils.readLines(new File(settingFile));
-				for (Object obj : lines) {
-					String line = (String) obj;
-					if (line.startsWith(PY_HOME_KEY)) {
-						fileInput.getTextField().setText(line.substring(PY_HOME_KEY.length()));
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		fileInput.getTextField().setText(ProjectConfiguration.pythonHome);
 		setVisible(true);
 	}
 

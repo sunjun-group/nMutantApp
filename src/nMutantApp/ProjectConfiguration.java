@@ -2,13 +2,19 @@ package nMutantApp;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
+import nMutantApp.metrics.SettingDialog;
 
 public class ProjectConfiguration {
 	private static String installFolder;
 	private static String pythonAgentWorkingDir;
 	public static String pythonHome;
+	public static String settingFile;
 	
 	static {
 		String path = new File(ProjectConfiguration.class.getProtectionDomain().getCodeSource().getLocation().getPath())
@@ -24,7 +30,28 @@ public class ProjectConfiguration {
 		}
 		installFolder = path;
 		pythonAgentWorkingDir = "/Users/lylytran/Projects/Python/nMutant/attack_metrics";
+		loadSettings();
 //		pythonWorkingDir = ProjectConfiguration.getAbsolutePath("/python/nMutant/nmutant_integration");
+		if (pythonHome == null) {
+			pythonHome = "python";
+		}
+	}
+	
+	private static void loadSettings() {
+		settingFile = getAbsolutePath("/nmutant.conf");
+		if (new File(settingFile).exists()) {
+			try {
+				List<?> lines = FileUtils.readLines(new File(settingFile));
+				for (Object obj : lines) {
+					String line = (String) obj;
+					if (line.startsWith(SettingDialog.PY_HOME_KEY)) {
+						pythonHome = line.substring(SettingDialog.PY_HOME_KEY.length());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void main(String[] args) {

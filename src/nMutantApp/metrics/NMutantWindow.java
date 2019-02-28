@@ -6,19 +6,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+
+import nMutantApp.metrics.MetricsCalculator.MetricsOutputHandler;
 
 public class NMutantWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
-	InputPane inputPane = new InputPane();
-	OutputPane outputPane = new OutputPane();
-	ConsolePane consolePane = new ConsolePane();
+	InputPane inputPane;
+	OutputPane outputPane;
+	ConsolePane consolePane;
 
 	/**
 	 * Launch the application.
@@ -40,6 +40,27 @@ public class NMutantWindow extends JFrame {
 	 * Create the application.
 	 */
 	public NMutantWindow() {
+		outputPane = new OutputPane();
+		consolePane = new ConsolePane();
+		MetricsOutputHandler callback = new MetricsOutputHandler() {
+			
+			@Override
+			public void printOutConsole(String line) {
+				consolePane.appendText(line);
+			}
+
+			@Override
+			public void enterCalculateMetrics() {
+				outputPane.textArea.setText("");
+				consolePane.textArea.setText("");
+			}
+
+			@Override
+			public void printOutResult(String output) {
+				outputPane.appendText(output);
+			}
+		};
+		inputPane = new InputPane(callback);
 		initialize();
 		setDefaultValue();
 	}
@@ -72,9 +93,9 @@ public class NMutantWindow extends JFrame {
 			}
 		});
 		/* content */
-		inputPane.setMinimumSize(new Dimension(200, 50));
-		inputPane.setPreferredSize(new Dimension(200, 50));
-		inputPane.setMaximumSize(new Dimension(200, 2147483647));
+		inputPane.setMinimumSize(new Dimension(250, 50));
+		inputPane.setPreferredSize(new Dimension(250, 50));
+		inputPane.setMaximumSize(new Dimension(250, 2147483647));
 		
 		JSplitPane sp1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPane, consolePane);
 		sp1.setResizeWeight(0.65);
