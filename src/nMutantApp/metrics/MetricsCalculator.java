@@ -37,6 +37,7 @@ public class MetricsCalculator implements Runnable {
 	@Override
 	public void run() {
 		try {
+			outputHandler.printOutConsole("Calculate metrics..\n");
 			String modelFolder = sav.common.core.utils.FileUtils.getFilePath(
 					ProjectConfiguration.getPythonAgentWorkingDir(),
 					"../adv_result", dataset.name(), attack.getText(), model);
