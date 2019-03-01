@@ -26,12 +26,13 @@ public class FileInput {
 		
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				onSelectFile(textField, true);
+				onSelectFile(textField);
 			}
 		});
+		this.directoryMode = directoryMode;
 	}
 
-	protected void onSelectFile(JTextField txtOutputDest, boolean b) {
+	protected void onSelectFile(JTextField txtOutputDest) {
 		if (!StringUtils.isEmpty(textField.getText())) {
 			fc.setSelectedFile(new File(textField.getText()));
 		} else {

@@ -29,9 +29,9 @@ public class ProjectConfiguration {
 			path = path.substring(0, path.indexOf("/nMutant.jar"));
 		}
 		installFolder = path;
-		pythonAgentWorkingDir = "/Users/lylytran/Projects/Python/nMutant/attack_metrics";
+//		pythonAgentWorkingDir = "/Users/lylytran/Projects/Python/nMutant/attack_metrics";
+		pythonAgentWorkingDir = ProjectConfiguration.getAbsolutePath("/python/nMutant/attack_metrics");
 		loadSettings();
-//		pythonWorkingDir = ProjectConfiguration.getAbsolutePath("/python/nMutant/nmutant_integration");
 		if (pythonHome == null) {
 			pythonHome = "python";
 		}

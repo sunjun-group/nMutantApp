@@ -93,9 +93,9 @@ public class NMutantWindow extends JFrame {
 			}
 		});
 		/* content */
-		inputPane.setMinimumSize(new Dimension(250, 50));
-		inputPane.setPreferredSize(new Dimension(250, 50));
-		inputPane.setMaximumSize(new Dimension(250, 2147483647));
+		inputPane.setMinimumSize(new Dimension(300, 50));
+		inputPane.setPreferredSize(new Dimension(300, 50));
+		inputPane.setMaximumSize(new Dimension(300, 2147483647));
 		
 		JSplitPane sp1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPane, consolePane);
 		sp1.setResizeWeight(0.65);

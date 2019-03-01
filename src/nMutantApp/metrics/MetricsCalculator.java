@@ -16,19 +16,44 @@ public class MetricsCalculator implements Runnable {
 	DataSet dataset;
 	AttackFunction attack;
 	String model;
+//	String trainedDataFolder;
+//	String testDataFolder;
+	String dataSetFolder;
 	MetricsOutputHandler outputHandler;
 	
-	public MetricsCalculator(DataSet dataset, AttackFunction attack, String model,
-			MetricsOutputHandler outputHandler) {
+	public MetricsCalculator(MetricsOutputHandler outputHandler, DataSet dataset, AttackFunction attack, String model,
+			/* String trainedDataFolder, String testDataFolder*/
+			String dataSetFolder) {
 		this.dataset = dataset;
 		this.attack = attack;
 		this.model = model;
 		this.outputHandler = outputHandler;
+		this.dataSetFolder = dataSetFolder;
+//		this.trainedDataFolder = trainedDataFolder;
+//		this.testDataFolder = testDataFolder;
 	}
 	
+
 	@Override
 	public void run() {
 		try {
+			String modelFolder = sav.common.core.utils.FileUtils.getFilePath(
+					ProjectConfiguration.getPythonAgentWorkingDir(),
+					"../adv_result", dataset.name(), attack.getText(), model);
+			clearFolder(modelFolder);
+			
+//			String dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder, "train_data");
+//			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
+//			FileUtils.copyDirectory(new File(trainedDataFolder), new File(dataFolder));
+//			
+//			dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder, "test_data");
+//			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
+//			FileUtils.copyDirectory(new File(testDataFolder), new File(dataFolder));
+			
+			String dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder);
+			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
+			FileUtils.copyDirectory(new File(dataSetFolder), new File(dataFolder));
+			
 			outputHandler.enterCalculateMetrics();
 			PythonRunner pythonRunner = new PythonRunner(new Listener() {
 				
@@ -58,6 +83,14 @@ public class MetricsCalculator implements Runnable {
 		}
 	}
 	
+	private void clearFolder(String folder) {
+		File file = new File(folder);
+		if (file.exists()) {
+			nMutantApp.metrics.FileUtils.deleteFolder(file);
+		}
+		nMutantApp.metrics.FileUtils.createFolder(folder);
+	}
+
 	public static interface MetricsOutputHandler {
 
 		void printOutConsole(String line);

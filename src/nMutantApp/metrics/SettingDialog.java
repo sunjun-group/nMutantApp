@@ -41,13 +41,13 @@ public class SettingDialog extends JFrame {
 		getContentPane().add(panel, BorderLayout.NORTH);
 		fileInput = new FileInput("Python Executable: ", false, SettingDialog.this);
 		
-		panel.add(fileInput.getLbl(), JComponentFactory.gbc(0, 0, 1, 1));
-		panel.add(fileInput.getTextField(), JComponentFactory.gbc(1, 0, 3, 1));
-		panel.add(fileInput.getBtnBrowse(), JComponentFactory.gbc(4, 0, 1, 1));
+		panel.add(fileInput.getLbl(), JComponentFactory.gbc(0, 0, 1));
+		panel.add(fileInput.getTextField(), JComponentFactory.gbc(1, 0, 3));
+		panel.add(fileInput.getBtnBrowse(), JComponentFactory.gbc(4, 0, 1));
 		
 		JPanel bottomPanel = new JPanel(new GridBagLayout());
 		JLabel lbl = new JLabel("");
-		bottomPanel.add(lbl, JComponentFactory.gbc(0, 0, 3, 1));
+		bottomPanel.add(lbl, JComponentFactory.gbc(0, 0, 3));
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			
@@ -59,7 +59,7 @@ public class SettingDialog extends JFrame {
 				SettingDialog.this.dispose();
 			}
 		});
-		bottomPanel.add(btnOk, JComponentFactory.gbc(2, 0, 1, 1));
+		bottomPanel.add(btnOk, JComponentFactory.gbc(2, 0, 1));
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			
@@ -68,7 +68,7 @@ public class SettingDialog extends JFrame {
 				SettingDialog.this.dispose();
 			}
 		});
-		bottomPanel.add(btnCancel, JComponentFactory.gbc(3, 0, 1, 1));
+		bottomPanel.add(btnCancel, JComponentFactory.gbc(3, 0, 1));
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		
 	}

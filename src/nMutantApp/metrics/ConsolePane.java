@@ -22,7 +22,6 @@ public class ConsolePane extends JInternalFrame {
 		 SwingUtilities.invokeLater(new Runnable(){ 
              public void run(){    
                textArea.append(text);
-               textArea.setCaretPosition(textArea.getText().length() - 1);
              }
          });
 	}
