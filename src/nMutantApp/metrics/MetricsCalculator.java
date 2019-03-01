@@ -41,8 +41,10 @@ public class MetricsCalculator implements Runnable {
 			String modelFolder = sav.common.core.utils.FileUtils.getFilePath(
 					ProjectConfiguration.getPythonAgentWorkingDir(),
 					"../adv_result", dataset.name(), attack.getText(), model);
-			clearFolder(modelFolder);
-			
+			File target = new File(modelFolder);
+			File source = new File(dataSetFolder);
+			if (!(target.exists() && source.exists() && target.getCanonicalPath().equals(source.getCanonicalPath()))) {
+				clearFolder(modelFolder);
 //			String dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder, "train_data");
 //			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
 //			FileUtils.copyDirectory(new File(trainedDataFolder), new File(dataFolder));
@@ -50,10 +52,11 @@ public class MetricsCalculator implements Runnable {
 //			dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder, "test_data");
 //			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
 //			FileUtils.copyDirectory(new File(testDataFolder), new File(dataFolder));
-			
-			String dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder);
-			nMutantApp.metrics.FileUtils.createFolder(dataFolder);
-			FileUtils.copyDirectory(new File(dataSetFolder), new File(dataFolder));
+				
+				String dataFolder = sav.common.core.utils.FileUtils.getFilePath(modelFolder);
+				nMutantApp.metrics.FileUtils.createFolder(dataFolder);
+				FileUtils.copyDirectory(new File(dataSetFolder), new File(dataFolder));
+			} 
 			
 			outputHandler.enterCalculateMetrics();
 			PythonRunner pythonRunner = new PythonRunner(new Listener() {
